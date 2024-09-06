@@ -26,8 +26,9 @@ public class Order {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate orderDate;
 
-    public  Order toResponse(){
-        return new Order(this.id,this.customerId,this.productIds, this.orderDate);
+
+    public OrderResponse toResponse(CustomerResponse customerResponse , List<ProductResponse> productResponses){
+        return new OrderResponse(this.id,customerResponse,productResponses, this.orderDate);
     }
 
 

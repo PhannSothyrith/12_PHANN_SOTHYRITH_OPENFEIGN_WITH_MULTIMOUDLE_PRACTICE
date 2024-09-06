@@ -16,6 +16,15 @@ public class OrderRequest {
     private List<Long> productIds;
     private LocalDate orderDate;
 
+    public  Order toEntity (){
+        LocalDate orderDate = LocalDate.now();
+        return new Order (null,customerId,productIds,orderDate);
+    }
+    public  Order toEntity (Long id){
+        LocalDate orderDate = LocalDate.now();
+        return new Order (id,customerId,productIds,orderDate);
+    }
+
 
 }
 

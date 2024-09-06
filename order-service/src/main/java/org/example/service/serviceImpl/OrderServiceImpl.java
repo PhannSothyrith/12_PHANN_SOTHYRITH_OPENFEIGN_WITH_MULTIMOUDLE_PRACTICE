@@ -54,21 +54,7 @@ public class OrderServiceImpl implements OrderService {
                         throw new NotFoundException("Product not found with id: " + productId);
                     }
                 }).collect(Collectors.toList());
-
-        // 3. Create OrderResponse object and set customer details and product details
-        OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setCustomerResponse(customerResponse);
-        orderResponse.setProductResponses(productResponses);
-        orderResponse.setOrderDate(orderRequest.getOrderDate());
-
-        // 4. Create and save the order with product IDs
-        Order order = new Order();
-        order.setCustomerId(orderRequest.getCustomerId());
-        order.setProductIds(orderRequest.getProductIds());
-        order.setOrderDate(orderRequest.getOrderDate());
-        Order savedOrder = orderRepository.save(order);
-        orderResponse.setId(savedOrder.getId());
-        return orderResponse;
+        return orderRepository.save(orderRequest.toEntity()).toResponse(customerResponse,productResponses);
     }
 
     @Override
@@ -91,8 +77,6 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderResponses;
     }
-
-
 
     @Override
     public OrderResponse getOrderById(Long id) {
@@ -133,45 +117,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderResponse updateOrderById(Long id, OrderRequest orderRequest) {
-        Order order = orderRepository.findById(id).orElseThrow(() ->
-                new NotFoundException("Order not found with id: " + id)
-        );
-        CustomerResponse customerResponse;
-        try {
-            ResponseEntity<ApiResponse<CustomerResponse>> customerResponseEntity = customerServiceFeignClient.getCustomerById(orderRequest.getCustomerId());
-            ApiResponse<CustomerResponse> customerResponseApiResponse = customerResponseEntity.getBody();
-            if (customerResponseApiResponse == null) {
-                throw new NotFoundException("Customer not found with id: " + orderRequest.getCustomerId());
-            }
-            customerResponse = customerResponseApiResponse.getPayload();
-        } catch (Exception e) {
-            throw new NotFoundException("Customer not found with id: " + orderRequest.getCustomerId());
-        }
-        List<ProductResponse> productResponses = orderRequest.getProductIds().stream()
-                .map(productId -> {
-                    try {
-                        ResponseEntity<ApiResponse<ProductResponse>> productResponseEntity = productServiceFeignClient.getProductById(productId);
-                        ApiResponse<ProductResponse> productResponseApi = productResponseEntity.getBody();
-                        if (productResponseApi == null) {
-                            throw new NotFoundException("Product not found with id: " + productId);
-                        }
-                        return productResponseApi.getPayload();
-                    } catch (Exception e) {
-                        throw new NotFoundException("Product not found with id: " + productId);
-                    }
-                }).collect(Collectors.toList());
-
-        order.setCustomerId(orderRequest.getCustomerId());
-        order.setProductIds(orderRequest.getProductIds());
-        order.setOrderDate(orderRequest.getOrderDate());
-
-        Order updatedOrder = orderRepository.save(order);
-        OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setId(updatedOrder.getId());
-        orderResponse.setCustomerResponse(customerResponse);
-        orderResponse.setProductResponses(productResponses);
-        orderResponse.setOrderDate(updatedOrder.getOrderDate());
-        return orderResponse;
+        getOrderById(id);
+        orderRepository.save(orderRequest.toEntity(id));
+        return getOrderById(id);
     }
 
     @Override
