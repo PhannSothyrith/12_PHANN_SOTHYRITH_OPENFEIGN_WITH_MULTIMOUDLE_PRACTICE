@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: customer-service
+  datasource:
+    username: postgres
+    password: database09
+    url: jdbc:postgresql://localhost:5432/feign_db
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 8081
