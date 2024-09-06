@@ -59,6 +59,7 @@ public class OrderServiceImpl implements OrderService {
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setCustomerResponse(customerResponse);
         orderResponse.setProductResponses(productResponses);
+        orderResponse.setOrderDate(orderRequest.getOrderDate());
 
         // 4. Create and save the order with product IDs
         Order order = new Order();
@@ -85,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
                 return Objects.requireNonNull(productResponseEntity.getBody()).getPayload();
             }).toList();
             orderResponse.setProductResponses(productResponses);
+            orderResponse.setOrderDate(order.getOrderDate());
             orderResponses.add(orderResponse);
         }
         return orderResponses;
@@ -125,6 +127,7 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setId(order.getId());
         orderResponse.setCustomerResponse(customerResponse);
         orderResponse.setProductResponses(productResponses);
+        orderResponse.setOrderDate(order.getOrderDate());
         return orderResponse;
     }
 
@@ -167,6 +170,7 @@ public class OrderServiceImpl implements OrderService {
         orderResponse.setId(updatedOrder.getId());
         orderResponse.setCustomerResponse(customerResponse);
         orderResponse.setProductResponses(productResponses);
+        orderResponse.setOrderDate(updatedOrder.getOrderDate());
         return orderResponse;
     }
 
