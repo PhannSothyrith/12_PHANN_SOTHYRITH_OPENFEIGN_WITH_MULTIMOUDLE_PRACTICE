@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.example.model.Product;
@@ -20,6 +21,7 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping
+    @Operation(summary = "Create a new product")
     public ResponseEntity<ApiResponse<Product>> createProduct(@RequestBody ProductRequest productRequest){
         Product product = productService.createProduct(productRequest);
         ApiResponse<Product> apiResponse = ApiResponse.<Product>builder()
@@ -31,6 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
     @GetMapping("/{id}")
+    @Operation(summary = "Get product by id")
     public ResponseEntity<ApiResponse<Product>> getProductById(@PathVariable Long id){
         Product product = productService.getProductById(id);
         ApiResponse<Product> apiResponse = ApiResponse.<Product>builder()
@@ -42,6 +45,7 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
     @GetMapping
+    @Operation(summary = "Get all products")
     public ResponseEntity<ApiResponse<List<Product>>> getAllProduct (){
         List<Product> products = productService.getAllProducts();
         ApiResponse<List<Product>> apiResponse = ApiResponse.<List<Product>>builder()
@@ -53,6 +57,7 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
     @PutMapping("/{id}")
+    @Operation(summary = "Update product with id")
     public ResponseEntity<ApiResponse<Product>> updateProduct(@PathVariable Long id, @RequestBody ProductRequest productRequest){
         Product product = productService.updateProductById(id, productRequest);
         ApiResponse<Product> apiResponse = ApiResponse.<Product>builder()
@@ -64,6 +69,7 @@ public class ProductController {
         return ResponseEntity.ok(apiResponse);
     }
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete product with id")
     public ResponseEntity<ApiResponse<Product>> deleteProduct(@PathVariable Long id){
         productService.deleteProductById(id);
         ApiResponse<Product> apiResponse = ApiResponse.<Product>builder()

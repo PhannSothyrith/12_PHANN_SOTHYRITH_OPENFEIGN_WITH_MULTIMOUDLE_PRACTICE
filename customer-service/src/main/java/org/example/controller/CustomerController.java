@@ -1,5 +1,6 @@
 package org.example.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.example.model.Customer;
 import org.example.model.request.CustomerRequest;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CustomerController {
     private final CustomerService customerService;
     @PostMapping
+    @Operation(summary = "Create a new customer")
     public ResponseEntity<ApiResponse<Customer>> createCustomer(@RequestBody CustomerRequest customerRequest){
         Customer customer = customerService.createCustomer(customerRequest);
         ApiResponse<Customer> apiResponse = ApiResponse.<Customer>builder()
@@ -29,6 +31,7 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
     @GetMapping
+    @Operation(summary = "Get all customers")
    public ResponseEntity<ApiResponse<List<Customer>>> getAllCustomers(){
         List<Customer> customer= customerService.getAllCustomer();
         ApiResponse<List<Customer>> apiResponse = ApiResponse.<List<Customer>>builder()
@@ -40,6 +43,7 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
     @GetMapping("get-customer/{id}")
+    @Operation(summary = "Get customer by id")
     public ResponseEntity<ApiResponse<Customer>> getCustomerById(@PathVariable Long id){
         Customer customer = customerService.getCustomerById(id);
         ApiResponse<Customer> apiResponse = ApiResponse.<Customer>builder()
@@ -51,6 +55,7 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
     @PutMapping("/{id}")
+    @Operation(summary = "Update customer with id")
     public ResponseEntity<ApiResponse<Customer>> updateCustomer(@PathVariable Long id, @RequestBody CustomerRequest customerRequest){
         Customer customer = customerService.updateCustomerById(id, customerRequest);
         ApiResponse<Customer> apiResponse = ApiResponse.<Customer>builder()
@@ -62,6 +67,7 @@ public class CustomerController {
         return ResponseEntity.ok(apiResponse);
     }
     @DeleteMapping("/{id}")
+    @Operation(summary = "Update customer with id")
     public ResponseEntity<ApiResponse<Customer>> deleteCustomer(@PathVariable Long id){
         customerService.deleteCustomerById(id);
         ApiResponse<Customer> apiResponse = ApiResponse.<Customer>builder()
